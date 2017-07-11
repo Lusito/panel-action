@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="browser.css" rel="stylesheet" type="text/css"/>
+        <link href="panel.css" rel="stylesheet" type="text/css"/>
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="tabs">
+                <div data-url="tab1.html"><div class="tab-box"></div><div class="tab-label">Tab 1</div></div>
+                <div data-url="tab2.html"><div class="tab-box"></div><div class="tab-label">Tab 2</div></div>
+                <div data-url="tab3.html"><div class="tab-box"></div><div class="tab-label">Tab 3</div></div>
+                <div data-url="tab4.html"><div class="tab-box"></div><div class="tab-label">Tab 4</div></div>
+            </div>
+            <div id="urlbar"><input type="text" value="https://someurl.com/tab1.html" id="url"></div>
+            <div id="pages">
+                <div>
+                    <div>Tab1
+                        <button data-show-panel="{mode:'normal',url:'panel.html', bottom: 30, left: 20}">Open Panel</button>
+                        <button data-close-panel>Close Panel</button>
+                    </div>
+                    <div class="spacer"></div><div>Tab1</div>
+                    <div class="spacer"></div><div>Tab1</div>
+                </div>
+                <div>
+                    <div>Tab2
+                        <button data-show-panel="{mode:'compact',url:'panel_compact.html', top: 150, left: 60}">Open Panel</button>
+                        <button data-close-panel>Close Panel</button>
+                    </div>
+                    <div class="spacer"></div><div>Tab2</div>
+                    <div class="spacer"></div><div>Tab2</div>
+                </div>
+                <div>
+                    <div>Tab3
+                        <button data-show-panel="{mode:'compact',url:'panel_compact.html', bottom: 40, left: 40, right: 40}">Open Panel</button>
+                        <button data-close-panel>Close Panel</button>
+                    </div>
+                    <div class="spacer"></div><div>Tab3</div>
+                    <div class="spacer"></div><div>Tab3</div>
+                </div>
+                <div>
+                    <div>Tab4
+                        <button data-show-panel="{mode:'normal',url:'panel.html', top: 100, bottom: 40, left: 40, right: 40}">Open Panel</button>
+                        <button data-close-panel>Close Panel</button>
+                    </div>
+                    <div class="spacer"></div><div>Tab4</div>
+                    <div class="spacer"></div><div>Tab4</div>
+                </div>
+            </div>
+        </div>
+        <script src="browser.js" type="text/javascript"></script>
+        <script src="panelAction.js"></script>
+    </body>
+</html>
