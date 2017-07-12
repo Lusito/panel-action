@@ -52,7 +52,7 @@ var tabs = {
             byId('url').value = "http://someurl.com/" + tab.dataset.url;
         }
         function linkTab(tab) {
-            tab.id = "tab" + idCount++;
+            tab.id = "tab" + (++idCount);
             on(tab, 'click', function () {
                 tabs.active = tab;
                 for (var i = 0; i < tabs.tabs.length; i++) {

@@ -48,17 +48,6 @@ var panelInternal = {
         }
         return panel;
     },
-    close: function() {
-        var panel = panelInternal.active;
-        if(panel) {
-            if(panel._dom) {
-                panel._dom.close();
-            } else {
-                panelInternal.doClose(panel.tabId);
-            }
-            panelInternal.active = null;
-        }
-    },
     cssFromOptions: function(options) {
         var css = {};
         for(var key of ["width", "height", "left", "right", "top", "bottom"]) {
@@ -67,11 +56,13 @@ var panelInternal = {
         }
         return css;
     },
-    show: function(e) {
-        var options = parseRelaxedJSON(e.currentTarget.dataset.showPanel);
-        panelInternal.close();
-        var panel = panelInternal.find(tabs.active.id, true);
-        panelInternal.active = panel;
+    open: function(options) {
+        var panel = panelInternal.find(options.tabId, true);
+        panelInternal.close(panel);
+        panelInternal.panels[options.tabId] = panel;
+        var active = options.tabId === tabs.active.id;
+        if(active)
+            panelInternal.active = panel;
         panel._dom = new PanelDom(options.mode, options.url);
         panel._dom.onClose = function() {
             panel._dom = null;
@@ -79,8 +70,25 @@ var panelInternal = {
         };
         var css = panelInternal.cssFromOptions(options);
         panel._dom.applyCSS(css);
+        if(active) {
+            panel._dom.show();
+            panelAction.onShown.emit(panel);
+        } else {
+            panel._dom.hide();
+        }
+        return panel;
+    },
+    close: function(panel) {
+        if(panel._dom) {
+            panel._dom.close();
+        } else {
+            panelInternal.doClose(panel.tabId);
+        }
+        if(panel === panelInternal.active)
+            panelInternal.active = null;
     }
 };
+
 tabs.onChange.addListener((tab)=> {
     var panel = panelInternal.active;
     if(panel) {
@@ -91,12 +99,12 @@ tabs.onChange.addListener((tab)=> {
     }
     try {
         panel = panelInternal.find(tab.id);
-        panelAction.onShown.emit(panel);
         if(panel._dom)
             panel._dom.show();
+        panelAction.onShown.emit(panel);
         panelInternal.active = panel;
     } catch(e) {
-        
+
     }
 });
 
@@ -140,16 +148,28 @@ class PanelDom {
     }
 }
 
-function initButtons() {
-    var closePanels = document.querySelectorAll('button[data-close-panel]');
-    for(var i=0; i<closePanels.length; i++)
-        on(closePanels[i], 'click', panelInternal.close);
-    var showPanels = document.querySelectorAll('button[data-show-panel]');
-    for(var i=0; i<showPanels.length; i++)
-        on(showPanels[i], 'click', panelInternal.show);
-}
-
 var panelAction = {
+    open: function(details) {
+        return new Promise(function(resolve, reject) {
+            try {
+                var panel = panelInternal.open(details);
+                resolve(mixin({}, panel));
+            } catch(e) {
+                reject(e);
+            }
+        });
+    },
+    close: function(details) {
+        return new Promise(function(resolve, reject) {
+            try {
+                var panel = panelInternal.find(details.tabId);
+                panelInternal.close(panel);
+                resolve(mixin({}, panel));
+            } catch(e) {
+                reject(e);
+            }
+        });
+    },
     setProperties: function(details) {
         return new Promise(function(resolve, reject) {
             try {
@@ -198,10 +218,18 @@ var panelAction = {
             reject("not implemented yet");
         });
     },
-    sendMessage: function(tabId, message) {
+    sendMessage: function(tabId, message, options) {
         return new Promise(function(resolve, reject) {
-            //todo
-            reject("not implemented yet");
+            try {
+                var panel = panelInternal.find(tabId);
+                panel._dom.iframeNode.contentWindow.postMessage({
+                    message: message,
+                    options: options
+                }, '*');
+                resolve(mixin({}, panel));
+            } catch(e) {
+                reject(e);
+            }
         });
     },
     onFocus: new BrowserEvent(),
@@ -215,5 +243,3 @@ panelAction.ModeType = {
     NORMAL: "normal",
     COMPACT: "compact"
 };
-
-initButtons();
