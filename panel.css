@@ -1,58 +1,15 @@
-.panelActionWindow {
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    background: #F0F0F0;
-    border: 1px solid #CECECE;
-    border-radius: 3px;
+html {
+    margin: 0;
+}
+body {
     font-family: "Open Sans", sans-serif;
     font-size: 13px;
-    z-index: 999999999;
-    box-shadow: 0px 0px 7px 1px #c1c1c1;
-}
-.panelActionWindow iframe {
-    width: 100%;
-    height: 100%;
-    border: 0;
-}
-.panelActionWindow > div:first-child {
-    height: 24px;
-    box-sizing: border-box;
-    flex-grow: 0;
-    flex-shrink: 0;
-    display: flex;
-    flex-direction: row;
     user-select: none;
 }
-.panelActionWindow.normal > div:first-child {
-    border-bottom: 1px solid #CECECE;
-}
-.panelActionWindow.normal > div:last-child {
-    flex-grow: 1;
-    flex-shrink: 1;
-}
-.panelActionButton,
-.panelActionIcon {
-    margin: 4px;
-    width: 16px;
-    height: 16px;
-}
-.panelActionTitle {
-    flex-grow: 1;
-    line-height: 16px;
-    margin: 4px;
-    font-weight: bold;
-    cursor: default;
-}
-.panelActionButton {
-    line-height: 16px;
-    text-align: center;
-    border-radius: 3px;
-    color: gray;
-    font-weight: bold;
-    cursor: pointer;
-}
-.panelActionButton:hover {
-    background: gray;
-    color: white;
+body.compact {
+    margin: 3px;
+    overflow: hidden;
+    font-family: "Open Sans", sans-serif;
+    font-size: 13px;
+    user-select: none;
 }

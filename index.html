@@ -5,10 +5,81 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="browser.css" rel="stylesheet" type="text/css"/>
-        <link href="panel.css" rel="stylesheet" type="text/css"/>
+        <link href="panelAction.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
         <div id="wrapper">
+            <div id="controls">
+                <b>Action:</b>
+                <select data-action="open">
+                    <option value="">Open on</option>
+                    <optgroup label="Tabs">
+                        <option value="tab1">Tab 1</option>
+                        <option value="tab2">Tab 2</option>
+                        <option value="tab3">Tab 3</option>
+                        <option value="tab4">Tab 4</option>
+                    </optgroup>
+                </select>
+                <select data-action="close">
+                    <option value="">Close on</option>
+                    <optgroup label="Tabs">
+                        <option value="tab1">Tab 1</option>
+                        <option value="tab2">Tab 2</option>
+                        <option value="tab3">Tab 3</option>
+                        <option value="tab4">Tab 4</option>
+                    </optgroup>
+                </select>
+                <select data-action="update">
+                    <option value="">Set properties on</option>
+                    <optgroup label="Tabs">
+                        <option value="tab1">Tab 1</option>
+                        <option value="tab2">Tab 2</option>
+                        <option value="tab3">Tab 3</option>
+                        <option value="tab4">Tab 4</option>
+                    </optgroup>
+                </select>
+                <select data-action="message">
+                    <option value="">Send message on</option>
+                    <optgroup label="Tabs">
+                        <option value="tab1">Tab 1</option>
+                        <option value="tab2">Tab 2</option>
+                        <option value="tab3">Tab 3</option>
+                        <option value="tab4">Tab 4</option>
+                    </optgroup>
+                </select>
+                <span id="result_message"></span>
+            </div>
+            <div id="controlsOverlay">
+                <div>
+                    <b>Data/Options:</b>
+                    <span style="float: right;">
+                        <select id="control_presets">
+                            <option value="">Select a preset</option>
+                            <optgroup label="Open presets">
+                                <option value="{mode:'normal',url:'panel.html', bottom: 30, left: 20}">Normal Panel</option>
+                                <option value="{mode:'normal',url:'panel.html', top: 100, bottom: 40, left: 40, right: 40}">Large Normal Panel</option>
+                                <option value="{mode:'compact',url:'panel_compact.html', top: 150, left: 60}">Compact Panel</option>
+                                <option value="{mode:'compact',url:'panel_compact.html', bottom: 40, left: 40, right: 40}">Wide Compact Panel</option>
+                            </optgroup>
+                            <optgroup label="Set properties presets">
+                                <option value="{url:'panel2_compact.html'}">URL Change</option>
+                                <option value="{top: 100, bottom: 40, left: 40, right: 40, width: 100, height: 100}">Size Change</option>
+                                <option value="{mode:'normal'}">Mode Change</option>
+                            </optgroup>
+                            <optgroup label="Message presets">
+                                <option value="{foo: 'bar', bar 'foo'}">Message Foo Bar</option>
+                                <option value="{hello: 'world', pi: 3.14}">Message Hello World</option>
+                            </optgroup>
+                        </select>
+                    </span>
+                </div>
+                <textarea id="control_data">{
+    mode:'normal',
+    url:'panel.html',
+    bottom: 30,
+    left: 20
+}</textarea>
+            </div>
             <div id="tabs">
                 <div data-url="tab1.html"><div class="tab-box"></div><div class="tab-label">Tab 1</div></div>
                 <div data-url="tab2.html"><div class="tab-box"></div><div class="tab-label">Tab 2</div></div>
@@ -18,34 +89,22 @@
             <div id="urlbar"><input type="text" value="https://someurl.com/tab1.html" id="url"></div>
             <div id="pages">
                 <div>
-                    <div>Tab1
-                        <button data-open-panel="{tabId: 'tab1', mode:'normal',url:'panel.html', bottom: 30, left: 20}">Open Panel</button>
-                        <button data-close-panel="{tabId: 'tab1'}">Close Panel</button>
-                    </div>
+                    <div>Tab1</div>
                     <div class="spacer"></div><div>Tab1</div>
                     <div class="spacer"></div><div>Tab1</div>
                 </div>
                 <div>
-                    <div>Tab2
-                        <button data-open-panel="{tabId: 'tab2', mode:'compact',url:'panel_compact.html', top: 150, left: 60}">Open Panel</button>
-                        <button data-close-panel="{tabId: 'tab2'}">Close Panel</button>
-                    </div>
+                    <div>Tab2</div>
                     <div class="spacer"></div><div>Tab2</div>
                     <div class="spacer"></div><div>Tab2</div>
                 </div>
                 <div>
-                    <div>Tab3
-                        <button data-open-panel="{tabId: 'tab3', mode:'compact',url:'panel_compact.html', bottom: 40, left: 40, right: 40}">Open Panel</button>
-                        <button data-close-panel="{tabId: 'tab3'}">Close Panel</button>
-                    </div>
+                    <div>Tab3</div>
                     <div class="spacer"></div><div>Tab3</div>
                     <div class="spacer"></div><div>Tab3</div>
                 </div>
                 <div>
-                    <div>Tab4
-                        <button data-open-panel="{tabId: 'tab4', mode:'normal',url:'panel.html', top: 100, bottom: 40, left: 40, right: 40}">Open Panel</button>
-                        <button data-close-panel="{tabId: 'tab4'}">Close Panel</button>
-                    </div>
+                    <div>Tab4</div>
                     <div class="spacer"></div><div>Tab4</div>
                     <div class="spacer"></div><div>Tab4</div>
                 </div>

@@ -182,9 +182,11 @@ var panelAction = {
                     }
                 }
                 if(changed.indexOf('mode') >= 0) {
-                    // todo: recreate panelui
+                    // recreate panel ui
+                    panel = panelInternal.open(panel);
                 } else {
-                    // todo: if url change: change iframe
+                    if(changed.indexOf('url') >= 0 && panel._dom)
+                        panel._dom.iframeNode.src = panel.url;
                     if(changed.indexOf('left') >= 0 || changed.indexOf('right') >= 0
                             || changed.indexOf('bottom') >= 0 || changed.indexOf('top') >= 0
                             || changed.indexOf('width') >= 0 || changed.indexOf('height') >= 0) {

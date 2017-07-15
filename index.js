@@ -1,24 +1,60 @@
 /* global panelAction */
 
 (function() {
-    function initOpenButton(b) {
-        var options = parseRelaxedJSON(b.dataset.openPanel);
-        on(b, 'click', ()=> {
-            panelAction.open(options).then((panel)=> {
-                setTimeout(()=> {
-                    panelAction.sendMessage(options.tabId, 'test', {foo: 'bar'});
-                }, 1000);
+    var actionCount = 0;
+    var resultMessage = byId('result_message');
+    var data = byId('control_data');
+    function doAction(tabId, action) {
+        var options = parseRelaxedJSON(data.value);
+        var promise;
+        switch(action) {
+            case "open":
+                promise = panelAction.open(mixin({tabId: tabId}, options));
+                break;
+            case "close":
+                promise = panelAction.close({tabId: tabId});
+                break;
+            case "update":
+                promise = panelAction.setProperties(mixin({tabId: tabId}, options));
+                break;
+            case "message":
+                promise = panelAction.sendMessage(tabId, "testMessage", options);
+                break;
+        }
+        var actionId = ++actionCount;
+        if(promise) {
+            promise.then(()=> {
+                resultMessage.textContent = '(' + actionId + ') Success!';
+                resultMessage.className = 'success';
+            }, (e)=> {
+                resultMessage.textContent = '(' + actionId + ') Error: ' + e.toString();
+                resultMessage.className = 'error';
             });
+        }
+    }
+
+    function initAction(select) {
+        var action = select.dataset.action;
+        on(select, 'change', ()=> {
+            if(select.value !== '') {
+                doAction(select.value, action);
+                select.value = '';
+            }
         });
     }
-    function initCloseButton(b) {
-        var options = parseRelaxedJSON(b.dataset.closePanel);
-        on(b, 'click', ()=> panelAction.close(options));
+    var actions = document.querySelectorAll('select[data-action]');
+    for(var i=0; i<actions.length; i++)
+        initAction(actions[i]);
+    
+    function setPreset(value) {
+        value = value.replace(/,\s*/g, ',\n    ').replace(/{\s*/, '{\n    ').replace(/\s*}/, '\n\}');
+        data.value = value;
     }
-    var openPanels = document.querySelectorAll('button[data-open-panel]');
-    for(var i=0; i<openPanels.length; i++)
-        initOpenButton(openPanels[i]);
-    var closePanels = document.querySelectorAll('button[data-close-panel]');
-    for(var i=0; i<closePanels.length; i++)
-        initCloseButton(closePanels[i]);
+    var presets = byId('control_presets');
+    on(presets, 'change', ()=> {
+        if(presets.value !== '') {
+            setPreset(presets.value);
+            presets.value = '';
+        }
+    });
 })();
