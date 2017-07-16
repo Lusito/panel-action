@@ -57,4 +57,16 @@
             presets.value = '';
         }
     });
+    panelAction.onShown.addListener((panel)=> {
+        console.log('shown panel on tab: ' + panel.tabId);
+    });
+    panelAction.onHidden.addListener((panel)=> {
+        console.log('hidden panel on tab: ' + panel.tabId);
+    });
+    panelAction.onBlur.addListener((panel)=> {
+        console.log('blurred panel on tab: ' + panel.tabId);
+    });
+    panelAction.onFocus.addListener((panel)=> {
+        console.log('focussed panel on tab: ' + panel.tabId);
+    });
 })();
