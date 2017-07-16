@@ -51,9 +51,16 @@ var panelInternal = {
     cssFromOptions: function(options) {
         var css = {};
         for(var key of ["width", "height", "left", "right", "top", "bottom"]) {
-            if(options.hasOwnProperty(key))
-                css[key] = options[key] + 'px';
+            if(options.hasOwnProperty(key)) {
+                var value = options[key];
+                if(value !== null && typeof(value) !== 'undefined')
+                    css[key] = value + 'px';
+            }
         }
+        if(css.width && css.left && css.right)
+            delete css.width;
+        if(css.height && css.top && css.bottom)
+            delete css.height;
         return css;
     },
     open: function(options) {
@@ -142,9 +149,11 @@ class PanelDom {
         document.body.removeChild(this.windowNode);
     }
     applyCSS(css) {
+        var style = '';
         for(var key in css) {
-            this.windowNode.style[key] = css[key];
+            style += key + ':' + css[key] + ';';
         }
+        this.windowNode.style = style;
     }
 }
 
