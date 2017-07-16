@@ -182,6 +182,8 @@ var panelAction = {
     setProperties: function(details) {
         return new Promise(function(resolve, reject) {
             try {
+                if(details.hasOwnProperty('visible'))
+                    throw 'visible is currently read-only';
                 var panel = panelInternal.find(details.tabId);
                 var changed = [];
                 for(var key in details) {
@@ -203,9 +205,9 @@ var panelAction = {
                             panel._dom.applyCSS(panelInternal.cssFromOptions(panel));
                     }
                 }
-                //todo:
-                // if focus change: focus/blur
-                // if visible change: show/hide
+                if(changed.indexOf('focus') >= 0) {
+                    //todo: focus/blur
+                }
                 resolve(mixin({}, panel));
             } catch(e) {
                 reject(e);
@@ -243,14 +245,15 @@ var panelAction = {
             }
         });
     },
+    // Events
     onFocus: new BrowserEvent(),
     onBlur: new BrowserEvent(),
     onShown: new BrowserEvent(),
-    onHidden: new BrowserEvent()
-};
-
-//Types:
-panelAction.ModeType = {
-    NORMAL: "normal",
-    COMPACT: "compact"
+    onHidden: new BrowserEvent(),
+    
+    // Types
+    ModeType: {
+        NORMAL: "normal",
+        COMPACT: "compact"
+    }
 };
